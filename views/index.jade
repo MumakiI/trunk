@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  div(class="container")
+   div(class="row")
+    div(class="col s12") hi
+    div(class="col s2 offset-s3") 
+     div(class="card small hoverable")
+      div(class="card-image")
+       img(src="177x177.jpg")
+       span.card-title О-о-очёнки н-нада?
+      div.card-content
+       p ЧУВАК ЭТО РЭПЧИК
+    div(class="col s2") 
+     div(class="card small") hi2
+    div(class="col s2") 
+     div(class="card small", id="container") hi3
+   div.row
+    div(class="col s2 offset-s5")
+     div.collection(id="user-list") 
+   div.row
+    div(class="input-field col s2 offset-s5" id="reservation-input")
+     input(type="text")     
+    div(class="input-field col s1" id="reservation-add")
+     a.btn add
+        
+   div.row(id="reservation-list")    
+     
+     
+      
+  div(style="display: none", id="user-template"). 
+   <%= userName %>
