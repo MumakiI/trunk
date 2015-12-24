@@ -1,30 +1,6 @@
 
 
 $(document).ready(function(){
-
-//	var Todo = Backbone.Model.extend({
-//		status: function(){return {status:"OKk"}}
-//	})
-	
-	var AppView = Backbone.View.extend({
-	      // el - stands for element. Every view has a element associate in with HTML
-	      //      content will be rendered.
-	      el: '#container',
-	      
-	      template: _.template("<div class='card-content'><%=who%></div>"),
-	      
-	      // It's the first function called when this view it's instantiated.
-	      initialize: function(){
-	        this.render();
-	      },
-	      // $el - it's a cached jQuery object (el), in which you can use jQuery functions
-	      //       to push content. Like the Hello World in this case.
-	      render: function(){
-	        this.$el.html(this.template({who: "КЭПЧИК"}));
-	      }
-	    });
-	
-	var appView = new AppView();
 	
 	var ve = {};
 	
@@ -67,7 +43,12 @@ $(document).ready(function(){
 			start : null,
 			end : null,
 			status : 'new'
+		},
+		
+		reserve : function() {
+			this.save({status: 'reserved'});
 		}
+	
 	});
 	
 	ve.ReservationItemList = Backbone.Collection.extend({
@@ -75,7 +56,7 @@ $(document).ready(function(){
 	      localStorage: new Store("backbone-todo")
 	});
 	
-	ve.reservationItemList = new ReservationItemList();
+	ve.reservationItemList = new ve.ReservationItemList();
 	
 	ve.ReservationItemView = Backbone.View.extend({
 		tagName: 'a',
@@ -87,16 +68,27 @@ $(document).ready(function(){
 	      },
 	      
 	    
-	});
-	
-	
+	});	
 	
 	ve.ReservationListView = Backbone.View.extend({
 		el : '#reservation-list',
-		initialize: function() {
-		  ve.reservationItemList
+		initialize: function() {		  
+		  this.listenTo(ve.reservationItemList, 'add', this.onReservationAdd);
+		  ve.reservationItemList.fetch();
+		},
+		events : {
+			"click #reservation-add" : "create"
+		},		
+		onReservationAdd : function(ri) {
+			var riw = new ve.ReservationItemView({model: ri});
+			this.$("#reservation-list").append(riw.render().el);
+		},
+		create : function(e) {
+			ve.reservationItemList.create({id: $("#reservation-add").value});
 		}
 	});
-
+	
+	ve.reservationListView = new ve.ReservationListView();
+	//var vei = new ve();
 })	
 	
